@@ -8,7 +8,34 @@ registerSketch('sk2', function (p) {
 
   p.draw = function () {
     p.background(255);
+
+    let h = p.hour();
+    let m = p.minute();
+    let s = p.second();
+
+    let cols = 60; 
+    let rows = 60; 
+    let w = p.width / cols;
+    let h_size = p.height / rows;
+
     p.noStroke();
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+ 
+        if (r < m || (r === m && c < s)) {
+
+          p.fill(p.map(h, 0, 23, 50, 200), 100, 150);
+        } else if (r === m && c === s) {
+  
+          p.fill(255, 0, 0, p.abs(p.sin(p.frameCount * 0.1)) * 255);
+        } else {
+ 
+          p.fill(240); 
+        }
+        p.rect(c * w, r * h_size, w - 1, h_size - 1);
+      }
+    }
     p.fill(100, 150, 240);
     p.textSize(32);
     p.textAlign(p.CENTER, p.CENTER);
@@ -23,3 +50,5 @@ registerSketch('sk2', function (p) {
 
   p.windowResized = function () { p.resizeCanvas(CANVAS_SIZE, CANVAS_SIZE); };
 });
+
+
