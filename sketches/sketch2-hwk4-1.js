@@ -39,17 +39,24 @@ registerSketch('sk2', function (p) {
 
     let totalSeconds = m * 60 + s;
     let percent = (totalSeconds / 3600) * 100;
-    p.fill(220);
-    p.rect(p.width * 0.25, p.height / 2 + 20, p.width * 0.5, 10);
-    p.fill(p.map(h, 0, 23, 50, 200), 100, 150);
-    p.rect(p.width * 0.25, p.height / 2 + 20, p.map(percent, 0, 100, 0, p.width * 0.5), 10);
-    p.textSize(16);
-    p.text(p.floor(percent) + "%", p.width / 2, p.height / 2 + 45);
 
-    p.fill(100, 150, 240);
+    p.fill(0,150);
+    p.rectMode(p.CENTER);
+    p.rect(p.width / 2, p.height / 2 + 10, 220, 100, 10); // UI 区域的底框
+    p.rectMode(p.CORNER);
+
+    p.fill(255);
     p.textSize(32);
     p.textAlign(p.CENTER, p.CENTER);
     p.text(p.nf(h, 2) + ":" + p.nf(m, 2) + ":" + p.nf(s, 2), p.width / 2, p.height / 2);
+
+    p.fill(80);
+    p.rect(p.width * 0.4, p.height / 2 + 15, p.width * 0.2, 8);
+    p.fill(255, 204, 0);
+    p.rect(p.width * 0.4, p.height / 2 + 15, p.map(percent, 0, 100, 0, p.width * 0.2), 8);
+    p.fill(255);
+    p.textSize(14);
+    p.text(p.floor(percent) + "%", p.width / 2, p.height / 2 + 35);
 
     // Draw frame as part of the sketch output.
     p.noFill();
