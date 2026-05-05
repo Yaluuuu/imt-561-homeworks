@@ -56,7 +56,7 @@ registerSketch('sk3', function (p) {
   }
   function getLeafColor(h) {
     if (h >= 5 && h < 11) return p.color(p.random(100, 150), p.random(200, 255), 100);
-    if (h >= 11 && h < 16) return p.color(p.random(50, 100), p.random(150, 200), 50);
+    if (h >= 11 && h < 16) return p.color(p.random(230, 255), p.random(200, 230), 50);
     if (h >= 16 && h < 19) return p.color(p.random(200, 255), p.random(100, 150), 0);
     return p.color(p.random(150, 200), p.random(50, 100), 50);
   }
