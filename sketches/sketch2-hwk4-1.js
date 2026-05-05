@@ -36,6 +36,16 @@ registerSketch('sk2', function (p) {
         p.rect(c * w, r * h_size, w - 1, h_size - 1);
       }
     }
+
+    let totalSeconds = m * 60 + s;
+    let percent = (totalSeconds / 3600) * 100;
+    p.fill(220);
+    p.rect(p.width * 0.25, p.height / 2 + 20, p.width * 0.5, 10);
+    p.fill(p.map(h, 0, 23, 50, 200), 100, 150);
+    p.rect(p.width * 0.25, p.height / 2 + 20, p.map(percent, 0, 100, 0, p.width * 0.5), 10);
+    p.textSize(16);
+    p.text(p.floor(percent) + "%", p.width / 2, p.height / 2 + 45);
+
     p.fill(100, 150, 240);
     p.textSize(32);
     p.textAlign(p.CENTER, p.CENTER);
