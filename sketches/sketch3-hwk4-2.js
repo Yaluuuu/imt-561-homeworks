@@ -59,6 +59,18 @@ registerSketch('sk3', function (p) {
   p.setup = function () {
     p.createCanvas(CANVAS_SIZE, CANVAS_SIZE);
     lastSecond = p.second();
+
+    let h = p.hour();
+    let m = p.minute();
+    let pileHeight = p.map(m, 0, 59, p.height * 0.95, p.height * 0.2);
+    
+    let preExistingAmount = m * 20; 
+    for (let i = 0; i < preExistingAmount; i++) {
+      let leafColor = getLeafColor(h);
+      let startX = p.random(p.width);
+      let startY = p.random(pileHeight, p.height); 
+      leaves.push(new Leaf(startX, startY, leafColor, true));
+    }
   };
 
   p.draw = function () {
