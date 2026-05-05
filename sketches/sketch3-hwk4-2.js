@@ -4,7 +4,7 @@ registerSketch('sk3', function (p) {
   let leaves = [];
   let lastSecond;
   class Leaf {
-    constructor(x, y, col) {
+    constructor(x, y, col, isLanded = false) {
       this.pos = p.createVector(x, y);
       this.vel = p.createVector(p.random(-1, 1), p.random(1, 3));
       this.acc = p.createVector(0, 0);
@@ -12,9 +12,9 @@ registerSketch('sk3', function (p) {
       this.rotSpeed = p.random(-0.05, 0.05);
       this.color = col;
       this.size = p.random(10, 20);
-      this.isLanded = false;
+      this.isLanded = isLanded;
     }
-    update(pileLimit) {
+    update() {
       if (!this.isLanded) {
         let mouse = p.createVector(p.mouseX, p.mouseY);
         let dir = p5.Vector.sub(this.pos, mouse);
@@ -28,9 +28,14 @@ registerSketch('sk3', function (p) {
         this.angle += this.rotSpeed;
         this.acc.mult(0);
 
-        let individualLimit = pileLimit + p.random(-20, 20);
-        if (this.pos.y >= individualLimit) {
-          this.pos.y = individualLimit;
+        let h = p.hour();
+        let m = p.minute();
+    
+        let dayProgress = (h * 60 + m) / 1440;
+        let currentSurface = p.map(dayProgress, 0, 1, p.height - 55, 50);
+
+        if (this.pos.y >= currentSurface) {
+          this.pos.y = currentSurface;
           this.isLanded = true;
         }
       }
@@ -62,13 +67,19 @@ registerSketch('sk3', function (p) {
 
     let h = p.hour();
     let m = p.minute();
-    let pileHeight = p.map(m, 0, 59, p.height * 0.95, p.height * 0.2);
-    
-    let preExistingAmount = m * 20; 
+
+    // Calculate the total progress for 24 hous
+    let totalMinutesPast = h * 60 + m;
+    let dayProgress = totalMinutesPast / 1440;
+
+    let preExistingAmount = dayProgress * 2000; 
+
     for (let i = 0; i < preExistingAmount; i++) {
       let leafColor = getLeafColor(h);
       let startX = p.random(p.width);
-      let startY = p.random(pileHeight, p.height); 
+      let currentMaxHeight = p.map(dayProgress, 0, 1, p.height - 20, 50);
+      let startY = p.random(currentMaxHeight, p.height - 20);
+  
       leaves.push(new Leaf(startX, startY, leafColor, true));
     }
   };
@@ -91,11 +102,8 @@ registerSketch('sk3', function (p) {
 
     if (leaves.length > 2000) leaves.shift();
 
-    // Map minute to pile height
-    let pileHeight = p.map(m, 0, 59, p.height * 0.95, p.height * 0.2);
-
     for (let i = leaves.length - 1; i >= 0; i--) {
-      leaves[i].update(pileHeight);
+      leaves[i].update();
       leaves[i].display();
     }
 
