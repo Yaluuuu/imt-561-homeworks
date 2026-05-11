@@ -49,7 +49,7 @@ registerSketch('sk15', function (p) {
         let y = p.map(previousY[r], 0, 1440, p.height - margin, margin); 
         p.vertex(x, y);
       }
-      
+
       // Draw the bottom curve in reverse order
       for (let r = rowCount - 1; r >= 0; r--) {
         let val = table.getNum(r, categories[i]);
@@ -61,10 +61,18 @@ registerSketch('sk15', function (p) {
       p.endShape(p.CLOSE);
     }
 
+    // Draw the reference line ---
+    p.stroke(0, 150);
+    p.strokeWeight(2);
+  
+    let age70Index = 70 - 15; 
+    let lineX = p.map(age70Index, 0, rowCount - 1, margin, margin + w);
+    p.line(lineX, margin, lineX, p.height - margin);
+
+    p.fill(0);
     p.noStroke();
-    p.fill(70);
-    p.textSize(32);
-    p.textAlign(p.CENTER, p.CENTER);
+    p.textAlign(p.CENTER);
+    p.text('Age 70', lineX, p.height - margin + 20);
     p.text('HWK #5', p.width / 2, p.height / 2);
 
     // Draw frame as part of the sketch output.
