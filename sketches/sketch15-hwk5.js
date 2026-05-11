@@ -76,11 +76,22 @@ registerSketch('sk15', function (p) {
     
     // 3. Calculate the actual age corresponding to the index (assuming the starting age is 15)
     let currentAge = hoveredIndex + 15;
+    
+    // 4. Map the age index back to the X-coordinate for drawing the line
+    let lineX = p.map(hoveredIndex, 0, rowCount - 1, margin, margin + w);
 
+    // Draw the reference line moving with the mouse
+    p.stroke(0, 200); // Color darkened for better visibility
+    p.strokeWeight(1.5);
+    p.line(lineX, margin, lineX, p.height - margin);
+
+    // Draw the age text following the line
     p.fill(0);
     p.noStroke();
-    p.textAlign(p.CENTER, p.CENTER);
-    p.text('Age 70', lineX, p.height - margin + 20);
+    p.textAlign(p.CENTER);
+    p.textSize(14);
+    p.text('Age: ' + currentAge, lineX, p.height - margin + 25);
+    
 
     // Draw frame as part of the sketch output.
     p.noFill();
