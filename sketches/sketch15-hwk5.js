@@ -15,8 +15,8 @@ registerSketch('sk15', function (p) {
   let colors = ['#2a363b', '#e84a5f', '#ff847c', '#fecea8', '#99b898', '#355c7d'];
 
   p.preload = function () {
-    table = p.loadTable('/Users/chenyalu/Desktop/IMT561/week6/homework5/Americans_Time_spent_with_relationships_by_age.csv', 'csv', 'header');
-  };
+  table = p.get().loadTable('Americans_Time_spent_with_relationships_by_age.csv', 'csv', 'header'); 
+};
 
   p.setup = function () {
     p.createCanvas(CANVAS_SIZE, CANVAS_SIZE);
@@ -24,6 +24,13 @@ registerSketch('sk15', function (p) {
   };
 
   p.draw = function () {
+    // security check
+  if (!table || table.getRowCount() === 0) {
+    p.background(255);
+    p.text("Loading data...", p.width/2, p.height/2);
+    return; 
+  }
+
     p.background(255);
 
     let margin = 60;
