@@ -15,12 +15,11 @@ registerSketch('sk15', function (p) {
   let colors = ['#2a363b', '#e84a5f', '#ff847c', '#fecea8', '#99b898', '#355c7d'];
 
   p.preload = function () {
-  table = p.get().loadTable('Americans_Time_spent_with_relationships_by_age.csv', 'csv', 'header'); 
+  table = p.loadTable('Americans_Time_spent_with_relationships_by_age.csv', 'csv', 'header'); 
 };
 
   p.setup = function () {
     p.createCanvas(CANVAS_SIZE, CANVAS_SIZE);
-    p.noLoop();
   };
 
   p.draw = function () {
@@ -69,18 +68,19 @@ registerSketch('sk15', function (p) {
     }
 
     // Draw the reference line ---
-    p.stroke(0, 150);
-    p.strokeWeight(2);
-  
-    let age70Index = 70 - 15; 
-    let lineX = p.map(age70Index, 0, rowCount - 1, margin, margin + w);
-    p.line(lineX, margin, lineX, p.height - margin);
+    // 1. Limit the X-coordinate of the mouse within the valid range of the chart
+    let mx = p.constrain(p.mouseX, margin, margin + w);
+    
+    // 2. Map the mouse coordinates back to the age index (from 0 to rowCount-1)
+    let hoveredIndex = p.round(p.map(mx, margin, margin + w, 0, rowCount - 1));
+    
+    // 3. Calculate the actual age corresponding to the index (assuming the starting age is 15)
+    let currentAge = hoveredIndex + 15;
 
     p.fill(0);
     p.noStroke();
-    p.textAlign(p.CENTER);
+    p.textAlign(p.CENTER, p.CENTER);
     p.text('Age 70', lineX, p.height - margin + 20);
-    p.text('HWK #5', p.width / 2, p.height / 2);
 
     // Draw frame as part of the sketch output.
     p.noFill();
