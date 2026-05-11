@@ -32,9 +32,11 @@ registerSketch('sk15', function (p) {
 
     p.background(255);
 
-    let margin = 60;
+    let margin = 80;
     let w = p.width - margin * 2;
     let h = p.height - margin * 2;
+
+    let maxHours = 8;
     
     if (!table) return; // security check for data loading
 
@@ -51,20 +53,54 @@ registerSketch('sk15', function (p) {
         let val = table.getNum(r, categories[i]);
         let x = p.map(r, 0, rowCount - 1, margin, margin + w);
         
-        previousY[r] += val; 
-        let y = p.map(previousY[r], 0, 1440, p.height - margin, margin); 
+        let y = p.map(val / 60, 0, maxHours, p.height - margin, margin); 
         p.vertex(x, y);
       }
 
       // Draw the bottom curve in reverse order
-      for (let r = rowCount - 1; r >= 0; r--) {
-        let val = table.getNum(r, categories[i]);
-        let x = p.map(r, 0, rowCount - 1, margin, margin + w);
-        let y = p.map(previousY[r] - val, 0, 1440, p.height - margin, margin);
-        p.vertex(x, y);
-      }
+      let baseY = p.height - margin;
+      p.vertex(margin + w, baseY); 
+      p.vertex(margin, baseY);
       
       p.endShape(p.CLOSE);
+    }
+
+    // Title
+    p.fill(0);
+    p.noStroke();
+    p.textSize(20);
+    p.textAlign(p.CENTER);
+    p.textStyle(p.BOLD);
+    p.text("Time Spent with Relationships", p.width / 2, 40);
+    p.textStyle(p.NORMAL);
+    p.textSize(12);
+    p.text("Average hours per day spent with others", p.width / 2, 60);
+
+    // Y-axis Label
+    p.push();
+    p.translate(30, p.height / 2);
+    p.rotate(-p.HALF_PI);
+    p.text("Hours per Day", 0, 0);
+    p.pop();
+
+    // X-axis Label
+    p.text("Age (Years Old)", p.width / 2, p.height - 20);
+
+    // Ticks
+    p.stroke(200);
+    p.textSize(10);
+    p.textAlign(p.RIGHT, p.CENTER);
+    for (let hr = 0; hr <= maxHours; hr++) {
+      let yVal = p.map(hr, 0, maxHours, p.height - margin, margin);
+      p.line(margin - 5, yVal, margin, yVal);
+      p.text(hr, margin - 10, yVal);
+    }
+    
+    for (let ageTick = 15; ageTick <= 80; ageTick += 10) { // every 10 years a tick
+      let xVal = p.map(ageTick - 15, 0, rowCount - 1, margin, margin + w);
+      p.line(xVal, p.height - margin, xVal, p.height - margin + 5);
+      p.textAlign(p.CENTER, p.TOP);
+      p.text(ageTick, xVal, p.height - margin + 10);
     }
 
     // Draw the reference line ---
