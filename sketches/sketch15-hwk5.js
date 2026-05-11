@@ -43,12 +43,43 @@ registerSketch('sk15', function (p) {
     let rowCount = table.getRowCount();
     let previousY = new Array(rowCount).fill(0); 
 
+    // Mouse interaction
+    let mx = p.constrain(p.mouseX, margin, margin + w);
+    let hoveredIndex = p.round(p.map(mx, margin, margin + w, 0, rowCount - 1));
+    let currentAge = hoveredIndex + 15;
+    let lineX = p.map(hoveredIndex, 0, rowCount - 1, margin, margin + w);
+    
+    let selectedCategory = -1;
+    let minDistance = 30; 
+
+    for (let i = 0; i < categories.length; i++) {
+      let val = table.getNum(hoveredIndex, categories[i]);
+      let yPos = p.map(val / 60, 0, maxHours, p.height - margin, margin);
+      
+      let d = p.abs(p.mouseY - yPos);
+      if (d < minDistance) {
+        minDistance = d;
+        selectedCategory = i;
+      }
+    } 
+
     for (let i = 0; i < categories.length; i++) {
       let c = p.color(colors[i % colors.length]);
-      c.setAlpha(150); 
-      p.fill(c);
-      p.noStroke();
+
+      // Set alpha based on selection
+      if (selectedCategory === -1) {
+        c.setAlpha(150); 
+        p.noStroke();
+      } else if (selectedCategory === i) {
+        c.setAlpha(230); 
+        p.stroke(c);     
+        p.strokeWeight(3);
+      } else {
+        c.setAlpha(40); 
+        p.noStroke();
+      }
       
+      p.fill(c);
       p.beginShape();
       // Draw the top curve
       for (let r = 0; r < rowCount; r++) {
@@ -70,20 +101,37 @@ registerSketch('sk15', function (p) {
     // Legend
     let legendX = margin + 20; 
     let legendY = margin + 20; 
-    let spacing = 20;          
-
-    p.textAlign(p.LEFT, p.CENTER);
-    p.textSize(10);
-    
     let shortNames = ["Alone", "Partner", "Children", "Family", "Friends", "Coworkers"];
 
     for (let i = 0; i < categories.length; i++) {
-      p.fill(colors[i % colors.length]);
-      p.noStroke();
-      p.rect(legendX, legendY + i * spacing, 12, 12);
-      
+      p.textAlign(p.LEFT, p.CENTER);
+      p.textSize(11);
+
+      if (selectedCategory === i) {
+        p.textStyle(p.BOLD);
+        p.fill(colors[i]);
+        p.rect(legendX - 2, legendY + i * 20 - 2, 16, 16); 
+      } else {
+        p.textStyle(p.NORMAL);
+        p.fill(colors[i]);
+        p.rect(legendX, legendY + i * 20, 12, 12);
+      }
+
       p.fill(0);
-      p.text(shortNames[i], legendX + 20, legendY + i * spacing + 6);
+      p.text(shortNames[i], legendX + 25, legendY + i * 20 + 6);
+    }
+    p.textStyle(p.NORMAL);
+       
+    p.stroke(0, 50); 
+    p.line(lineX, margin, lineX, p.height - margin);
+
+    // Display hovered values
+    if (selectedCategory !== -1) {
+      let val = table.getNum(hoveredIndex, categories[selectedCategory]);
+      let hr = (val / 60).toFixed(1);
+      p.fill(0);
+      p.textAlign(p.CENTER);
+      p.text(`${shortNames[selectedCategory]}: ${hr}h at Age ${hoveredIndex + 15}`, lineX, margin - 15);
     }
 
     // Title
@@ -124,23 +172,6 @@ registerSketch('sk15', function (p) {
       p.text(ageTick, xVal, p.height - margin + 10);
     }
 
-    // Draw the reference line ---
-    // 1. Limit the X-coordinate of the mouse within the valid range of the chart
-    let mx = p.constrain(p.mouseX, margin, margin + w);
-    
-    // 2. Map the mouse coordinates back to the age index (from 0 to rowCount-1)
-    let hoveredIndex = p.round(p.map(mx, margin, margin + w, 0, rowCount - 1));
-    
-    // 3. Calculate the actual age corresponding to the index (assuming the starting age is 15)
-    let currentAge = hoveredIndex + 15;
-    
-    // 4. Map the age index back to the X-coordinate for drawing the line
-    let lineX = p.map(hoveredIndex, 0, rowCount - 1, margin, margin + w);
-
-    // Draw the reference line moving with the mouse
-    p.stroke(0, 200); // Color darkened for better visibility
-    p.strokeWeight(1.5);
-    p.line(lineX, margin, lineX, p.height - margin);
 
     // Draw the age text following the line
     p.fill(0);
