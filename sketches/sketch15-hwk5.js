@@ -44,7 +44,9 @@ registerSketch('sk15', function (p) {
     let previousY = new Array(rowCount).fill(0); 
 
     for (let i = 0; i < categories.length; i++) {
-      p.fill(colors[i % colors.length]);
+      let c = p.color(colors[i % colors.length]);
+      c.setAlpha(150); 
+      p.fill(c);
       p.noStroke();
       
       p.beginShape();
