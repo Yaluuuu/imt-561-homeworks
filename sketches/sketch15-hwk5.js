@@ -67,6 +67,25 @@ registerSketch('sk15', function (p) {
       p.endShape(p.CLOSE);
     }
 
+    // Legend
+    let legendX = margin + 20; 
+    let legendY = margin + 20; 
+    let spacing = 20;          
+
+    p.textAlign(p.LEFT, p.CENTER);
+    p.textSize(10);
+    
+    let shortNames = ["Alone", "Partner", "Children", "Family", "Friends", "Coworkers"];
+
+    for (let i = 0; i < categories.length; i++) {
+      p.fill(colors[i % colors.length]);
+      p.noStroke();
+      p.rect(legendX, legendY + i * spacing, 12, 12);
+      
+      p.fill(0);
+      p.text(shortNames[i], legendX + 20, legendY + i * spacing + 6);
+    }
+
     // Title
     p.fill(0);
     p.noStroke();
