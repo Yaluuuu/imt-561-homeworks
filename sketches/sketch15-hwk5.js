@@ -49,6 +49,17 @@ registerSketch('sk15', function (p) {
         let y = p.map(previousY[r], 0, 1440, p.height - margin, margin); 
         p.vertex(x, y);
       }
+      
+      // Draw the bottom curve in reverse order
+      for (let r = rowCount - 1; r >= 0; r--) {
+        let val = table.getNum(r, categories[i]);
+        let x = p.map(r, 0, rowCount - 1, margin, margin + w);
+        let y = p.map(previousY[r] - val, 0, 1440, p.height - margin, margin);
+        p.vertex(x, y);
+      }
+      
+      p.endShape(p.CLOSE);
+    }
 
     p.noStroke();
     p.fill(70);
