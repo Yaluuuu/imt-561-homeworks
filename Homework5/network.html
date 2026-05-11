@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#318ce7", "font": {"color": "white"}, "id": "IT", "label": "IT", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Investment analyst", "label": "Investment analyst", "shape": "dot", "size": 10}, {"color": "#318ce7", "font": {"color": "white"}, "id": "Manufacturing", "label": "Manufacturing", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Journalist, newspaper", "label": "Journalist, newspaper", "shape": "dot", "size": 10}, {"color": "#318ce7", "font": {"color": "white"}, "id": "Finance", "label": "Finance", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Financial planner", "label": "Financial planner", "shape": "dot", "size": 10}, {"color": "#318ce7", "font": {"color": "white"}, "id": "Healthcare", "label": "Healthcare", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Legal secretary", "label": "Legal secretary", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Aeronautical engineer", "label": "Aeronautical engineer", "shape": "dot", "size": 10}, {"color": "#318ce7", "font": {"color": "white"}, "id": "Education", "label": "Education", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Surveyor, insurance", "label": "Surveyor, insurance", "shape": "dot", "size": 10}, {"color": "#318ce7", "font": {"color": "white"}, "id": "Entertainment", "label": "Entertainment", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Dentist", "label": "Dentist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Emergency planning/management officer", "label": "Emergency planning/management officer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Visual merchandiser", "label": "Visual merchandiser", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Housing manager/officer", "label": "Housing manager/officer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Geologist, wellsite", "label": "Geologist, wellsite", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Runner, broadcasting/film/video", "label": "Runner, broadcasting/film/video", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Press photographer", "label": "Press photographer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Biochemist, clinical", "label": "Biochemist, clinical", "shape": "dot", "size": 10}, {"color": "#318ce7", "font": {"color": "white"}, "id": "Retail", "label": "Retail", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Town planner", "label": "Town planner", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Engineer, civil (consulting)", "label": "Engineer, civil (consulting)", "shape": "dot", "size": 10}, {"color": "#318ce7", "font": {"color": "white"}, "id": "Transportation", "label": "Transportation", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Audiological scientist", "label": "Audiological scientist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Clinical scientist, histocompatibility and immunogenetics", "label": "Clinical scientist, histocompatibility and immunogenetics", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Music therapist", "label": "Music therapist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Advertising copywriter", "label": "Advertising copywriter", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Commercial horticulturist", "label": "Commercial horticulturist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Secondary school teacher", "label": "Secondary school teacher", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Production assistant, radio", "label": "Production assistant, radio", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Armed forces technical officer", "label": "Armed forces technical officer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Youth worker", "label": "Youth worker", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Special effects artist", "label": "Special effects artist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Ceramics designer", "label": "Ceramics designer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Animal technologist", "label": "Animal technologist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Firefighter", "label": "Firefighter", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Charity fundraiser", "label": "Charity fundraiser", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Jewellery designer", "label": "Jewellery designer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Ecologist", "label": "Ecologist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Operations geologist", "label": "Operations geologist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Patent attorney", "label": "Patent attorney", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Media buyer", "label": "Media buyer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Tour manager", "label": "Tour manager", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Higher education careers adviser", "label": "Higher education careers adviser", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Fitness centre manager", "label": "Fitness centre manager", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Immunologist", "label": "Immunologist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Contracting civil engineer", "label": "Contracting civil engineer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Surgeon", "label": "Surgeon", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Environmental consultant", "label": "Environmental consultant", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Engineer, electrical", "label": "Engineer, electrical", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Surveyor, commercial/residential", "label": "Surveyor, commercial/residential", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Customer service manager", "label": "Customer service manager", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Microbiologist", "label": "Microbiologist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Secretary/administrator", "label": "Secretary/administrator", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Armed forces operational officer", "label": "Armed forces operational officer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Therapist, horticultural", "label": "Therapist, horticultural", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Architect", "label": "Architect", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Engineer, structural", "label": "Engineer, structural", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Trade union research officer", "label": "Trade union research officer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Radio producer", "label": "Radio producer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Primary school teacher", "label": "Primary school teacher", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Site engineer", "label": "Site engineer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Electrical engineer", "label": "Electrical engineer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Armed forces logistics/support/administrative officer", "label": "Armed forces logistics/support/administrative officer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Programmer, systems", "label": "Programmer, systems", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Archivist", "label": "Archivist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Tourist information centre manager", "label": "Tourist information centre manager", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Occupational therapist", "label": "Occupational therapist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "General practice doctor", "label": "General practice doctor", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Air cabin crew", "label": "Air cabin crew", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Therapist, art", "label": "Therapist, art", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Lighting technician, broadcasting/film/video", "label": "Lighting technician, broadcasting/film/video", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Herbalist", "label": "Herbalist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Technical brewer", "label": "Technical brewer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Water engineer", "label": "Water engineer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Clothing/textile technologist", "label": "Clothing/textile technologist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cabin crew", "label": "Cabin crew", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Estate manager/land agent", "label": "Estate manager/land agent", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Database administrator", "label": "Database administrator", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Teacher, music", "label": "Teacher, music", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Clinical embryologist", "label": "Clinical embryologist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Photographer", "label": "Photographer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Consulting civil engineer", "label": "Consulting civil engineer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Designer, multimedia", "label": "Designer, multimedia", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Architectural technologist", "label": "Architectural technologist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Acupuncturist", "label": "Acupuncturist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Engineer, technical sales", "label": "Engineer, technical sales", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Engineer, mining", "label": "Engineer, mining", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Investment banker, operational", "label": "Investment banker, operational", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Manufacturing engineer", "label": "Manufacturing engineer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Librarian, public", "label": "Librarian, public", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Air broker", "label": "Air broker", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Counselling psychologist", "label": "Counselling psychologist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Quarry manager", "label": "Quarry manager", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Speech and language therapist", "label": "Speech and language therapist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Ranger/warden", "label": "Ranger/warden", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Animal nutritionist", "label": "Animal nutritionist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Engineer, civil (contracting)", "label": "Engineer, civil (contracting)", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"from": "IT", "to": "Investment analyst"}, {"from": "Manufacturing", "to": "Journalist, newspaper"}, {"from": "Finance", "to": "Financial planner"}, {"from": "Healthcare", "to": "Legal secretary"}, {"from": "IT", "to": "Aeronautical engineer"}, {"from": "Education", "to": "Legal secretary"}, {"from": "Manufacturing", "to": "Surveyor, insurance"}, {"from": "Entertainment", "to": "Dentist"}, {"from": "Education", "to": "Emergency planning/management officer"}, {"from": "Manufacturing", "to": "Visual merchandiser"}, {"from": "Manufacturing", "to": "Emergency planning/management officer"}, {"from": "Entertainment", "to": "Housing manager/officer"}, {"from": "Entertainment", "to": "Geologist, wellsite"}, {"from": "Healthcare", "to": "Runner, broadcasting/film/video"}, {"from": "Entertainment", "to": "Press photographer"}, {"from": "Entertainment", "to": "Biochemist, clinical"}, {"from": "Retail", "to": "Town planner"}, {"from": "Healthcare", "to": "Engineer, civil (consulting)"}, {"from": "Transportation", "to": "Audiological scientist"}, {"from": "Manufacturing", "to": "Clinical scientist, histocompatibility and immunogenetics"}, {"from": "Education", "to": "Music therapist"}, {"from": "Retail", "to": "Advertising copywriter"}, {"from": "Education", "to": "Commercial horticulturist"}, {"from": "Finance", "to": "Secondary school teacher"}, {"from": "Healthcare", "to": "Production assistant, radio"}, {"from": "Retail", "to": "Armed forces technical officer"}, {"from": "Retail", "to": "Youth worker"}, {"from": "Education", "to": "Special effects artist"}, {"from": "Transportation", "to": "Ceramics designer"}, {"from": "Transportation", "to": "Animal technologist"}, {"from": "IT", "to": "Firefighter"}, {"from": "Education", "to": "Charity fundraiser"}, {"from": "Education", "to": "Housing manager/officer"}, {"from": "Retail", "to": "Jewellery designer"}, {"from": "IT", "to": "Ecologist"}, {"from": "Entertainment", "to": "Operations geologist"}, {"from": "Entertainment", "to": "Patent attorney"}, {"from": "Transportation", "to": "Media buyer"}, {"from": "Entertainment", "to": "Town planner"}, {"from": "Finance", "to": "Tour manager"}, {"from": "Finance", "to": "Higher education careers adviser"}, {"from": "Transportation", "to": "Fitness centre manager"}, {"from": "IT", "to": "Immunologist"}, {"from": "Finance", "to": "Contracting civil engineer"}, {"from": "Healthcare", "to": "Surgeon"}, {"from": "Transportation", "to": "Environmental consultant"}, {"from": "Manufacturing", "to": "Engineer, electrical"}, {"from": "IT", "to": "Surveyor, commercial/residential"}, {"from": "Finance", "to": "Customer service manager"}, {"from": "Entertainment", "to": "Microbiologist"}, {"from": "Retail", "to": "Secretary/administrator"}, {"from": "Finance", "to": "Armed forces operational officer"}, {"from": "Healthcare", "to": "Therapist, horticultural"}, {"from": "Healthcare", "to": "Architect"}, {"from": "Education", "to": "Engineer, structural"}, {"from": "IT", "to": "Trade union research officer"}, {"from": "Finance", "to": "Radio producer"}, {"from": "Manufacturing", "to": "Primary school teacher"}, {"from": "Finance", "to": "Site engineer"}, {"from": "Retail", "to": "Tour manager"}, {"from": "Manufacturing", "to": "Electrical engineer"}, {"from": "Retail", "to": "Armed forces logistics/support/administrative officer"}, {"from": "Finance", "to": "Programmer, systems"}, {"from": "Finance", "to": "Archivist"}, {"from": "Retail", "to": "Tourist information centre manager"}, {"from": "Manufacturing", "to": "Occupational therapist"}, {"from": "Transportation", "to": "General practice doctor"}, {"from": "Retail", "to": "Air cabin crew"}, {"from": "Retail", "to": "Therapist, art"}, {"from": "Education", "to": "Lighting technician, broadcasting/film/video"}, {"from": "Manufacturing", "to": "Herbalist"}, {"from": "Education", "to": "Technical brewer"}, {"from": "Entertainment", "to": "Water engineer"}, {"from": "Finance", "to": "Animal technologist"}, {"from": "Finance", "to": "Clothing/textile technologist"}, {"from": "Education", "to": "Site engineer"}, {"from": "Retail", "to": "Cabin crew"}, {"from": "Retail", "to": "Estate manager/land agent"}, {"from": "Entertainment", "to": "Database administrator"}, {"from": "Manufacturing", "to": "Teacher, music"}, {"from": "IT", "to": "Clinical embryologist"}, {"from": "Retail", "to": "Photographer"}, {"from": "Transportation", "to": "Consulting civil engineer"}, {"from": "Finance", "to": "Designer, multimedia"}, {"from": "Education", "to": "Architectural technologist"}, {"from": "Retail", "to": "Acupuncturist"}, {"from": "Manufacturing", "to": "Engineer, technical sales"}, {"from": "Healthcare", "to": "Engineer, mining"}, {"from": "Education", "to": "Investment banker, operational"}, {"from": "Transportation", "to": "Manufacturing engineer"}, {"from": "Education", "to": "Librarian, public"}, {"from": "Transportation", "to": "Air broker"}, {"from": "Finance", "to": "Counselling psychologist"}, {"from": "Finance", "to": "Microbiologist"}, {"from": "Entertainment", "to": "Quarry manager"}, {"from": "Finance", "to": "Speech and language therapist"}, {"from": "Retail", "to": "Ranger/warden"}, {"from": "Retail", "to": "Animal nutritionist"}, {"from": "Education", "to": "Ecologist"}, {"from": "Finance", "to": "Engineer, civil (contracting)"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
