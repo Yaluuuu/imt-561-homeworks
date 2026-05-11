@@ -32,6 +32,24 @@ registerSketch('sk15', function (p) {
     
     if (!table) return; // security check for data loading
 
+    let rowCount = table.getRowCount();
+    let previousY = new Array(rowCount).fill(0); 
+
+    for (let i = 0; i < categories.length; i++) {
+      p.fill(colors[i % colors.length]);
+      p.noStroke();
+      
+      p.beginShape();
+      // Draw the top curve
+      for (let r = 0; r < rowCount; r++) {
+        let val = table.getNum(r, categories[i]);
+        let x = p.map(r, 0, rowCount - 1, margin, margin + w);
+        
+        previousY[r] += val; 
+        let y = p.map(previousY[r], 0, 1440, p.height - margin, margin); 
+        p.vertex(x, y);
+      }
+
     p.noStroke();
     p.fill(70);
     p.textSize(32);
