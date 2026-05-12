@@ -129,7 +129,7 @@ registerSketch('sk15', function (p) {
     if (selectedCategory !== -1) {
       let val = table.getNum(hoveredIndex, categories[selectedCategory]);
       let hr = (val / 60).toFixed(1);
-      let label = `${shortNames[selectedCategory]}: ${hr}h`;
+      let label = `${shortNames[selectedCategory]}: ${hr}h at Age ${currentAge}`;
 
       p.push();
       let boxW = p.textWidth(label) + 20;
@@ -143,12 +143,12 @@ registerSketch('sk15', function (p) {
 
       // Draw a semi-transparent background for better readability
       p.noStroke();
-      p.fill(40, 40, 40, 220); /
+      p.fill(40, 40, 40, 220); 
       p.rectMode(p.CORNER);
       let boxY = p.constrain(p.mouseY - 15, margin + 50, p.height - margin - 50);
       p.rect(boxX, boxY, boxW, boxH, 5);
 
-      p.fill(0); 
+      p.fill(255); 
       p.textAlign(p.CENTER, p.CENTER);
       p.textStyle(p.BOLD);
       p.textSize(12);

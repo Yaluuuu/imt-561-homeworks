@@ -11,7 +11,6 @@ window.registerSketch = function (id, factory) {
 const SKETCH_SCRIPT_BY_ID = {
     sk2: 'sketches/sketch2-hwk4-1.js',
     sk3: 'sketches/sketch3-hwk4-2.js',
-    sk4: 'sketches/sketch4.js',
     sk5: 'sketches/sketch5.js',
     sk6: 'sketches/sketch6.js',
     sk7: 'sketches/sketch7.js',
