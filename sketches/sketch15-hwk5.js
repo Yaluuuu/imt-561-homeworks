@@ -129,9 +129,32 @@ registerSketch('sk15', function (p) {
     if (selectedCategory !== -1) {
       let val = table.getNum(hoveredIndex, categories[selectedCategory]);
       let hr = (val / 60).toFixed(1);
-      p.fill(0);
-      p.textAlign(p.CENTER);
-      p.text(`${shortNames[selectedCategory]}: ${hr}h at Age ${hoveredIndex + 15}`, lineX, margin - 15);
+      let label = `${shortNames[selectedCategory]}: ${hr}h`;
+
+      p.push();
+      let boxW = p.textWidth(label) + 20;
+      let boxH = 28;
+
+      // Position the box to the right of the line
+      let boxX = lineX + 10; 
+      if (lineX > p.width - boxW - 20) {
+        boxX = lineX - boxW - 10; // If too close to right edge, position it to the left of the line
+      }
+
+      // Draw a semi-transparent background for better readability
+      p.noStroke();
+      p.fill(40, 40, 40, 220); /
+      p.rectMode(p.CORNER);
+      let boxY = p.constrain(p.mouseY - 15, margin + 50, p.height - margin - 50);
+      p.rect(boxX, boxY, boxW, boxH, 5);
+
+      p.fill(0); 
+      p.textAlign(p.CENTER, p.CENTER);
+      p.textStyle(p.BOLD);
+      p.textSize(12);
+      p.text(label, boxX + boxW/2, boxY + boxH/2);
+      
+      p.pop();
     }
 
     // Title
